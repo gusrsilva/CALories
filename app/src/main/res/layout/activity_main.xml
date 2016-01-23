@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="org.mobiledevsberkeley.calories.MainActivity"
+    android:id="@+id/main_layout">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/inputs_holder">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/workout_spinner"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:spinnerMode="dropdown" />
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/num_text"
+            android:layout_toEndOf="@+id/workout_spinner"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif-light"
+            android:layout_toStartOf="@+id/units_text"
+            android:hint=" " />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reps"
+            android:id="@+id/units_text"
+            android:textColor="@color/colorAccent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/calc_button"
+        android:id="@+id/calculate_button"
+        android:layout_below="@+id/inputs_holder"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorAccent"
+        android:fontFamily="sans-serif-light" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/results_holder"
+        android:layout_below="@+id/calculate_button">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/calories_burned"
+            android:id="@+id/calories_burned_text"
+            android:fontFamily="sans-serif-light"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:id="@+id/calories_burned_amount"
+            android:layout_below="@+id/calories_burned_text"
+            android:textAlignment="center"
+            android:textSize="100sp"
+            android:textColor="@android:color/black"
+            android:fontFamily="sans-serif-thin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/equivalent_to"
+            android:id="@+id/equivalent_text"
+            android:layout_below="@+id/calories_burned_amount"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-light" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/equivalent_text"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:id="@+id/equivalent_amount"
+                android:textAlignment="center"
+                android:textSize="40sp"
+                android:textColor="@android:color/black"
+                android:fontFamily="sans-serif-thin"
+                android:layout_centerInParent="true" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/equivalent_workout_spinner"
+                android:spinnerMode="dropdown"
+                android:layout_toRightOf="@+id/equivalent_amount"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

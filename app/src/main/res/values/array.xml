@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array
+        name="workout_value_array">
+        <item>350</item>
+        <item>200</item>
+        <item>10</item>
+        <item>12</item>
+    </integer-array>
+    <string-array name="workout_name_array">
+        <item>Push-ups</item>
+        <item>Sit-ups</item>
+        <item>Jumping Jacks</item>
+        <item>Jogging</item>
+    </string-array>
+    <integer-array name="workout_unit_array">
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+</resources>
