@@ -9,18 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.mobiledevsberkeley.calories.MainActivity"
     android:id="@+id/main_layout"
-    android:descendantFocusability="beforeDescendants">
+    android:descendantFocusability="beforeDescendants"
+    android:background="@drawable/bg">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/inputs_holder">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/workout_spinner_holder"
-        android:layout_centerVertical="true">
         <Spinner
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -28,9 +24,6 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:spinnerMode="dropdown" />
-    </android.support.v7.widget.CardView>
-
-
 
         <EditText
             android:layout_width="wrap_content"
@@ -38,7 +31,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/num_text"
-            android:layout_toEndOf="@+id/workout_spinner_holder"
+            android:layout_toEndOf="@+id/workout_spinner"
             android:textAlignment="center"
             android:fontFamily="sans-serif-light"
             android:layout_toStartOf="@+id/units_text"
@@ -69,7 +62,8 @@
             android:text="@string/calories_burned"
             android:id="@+id/calories_burned_text"
             android:fontFamily="sans-serif-light"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:shadowColor="@android:color/black" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -79,7 +73,7 @@
             android:layout_below="@+id/calories_burned_text"
             android:textAlignment="center"
             android:textSize="100sp"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:fontFamily="sans-serif-thin"
             android:layout_centerHorizontal="true"
             android:singleLine="true"
@@ -128,7 +122,7 @@
             android:id="@+id/equivalent_amount"
             android:textAlignment="center"
             android:textSize="40sp"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:fontFamily="sans-serif-thin"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/equivalent_text"
@@ -147,18 +141,11 @@
                 android:layout_height="wrap_content"
                 android:text="of"
                 android:id="@+id/equiv_units_text" />
-            <android.support.v7.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/equivalent_spinner_holder"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp">
                 <Spinner
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/equivalent_workout_spinner"
                     android:spinnerMode="dropdown" />
-            </android.support.v7.widget.CardView>
         </LinearLayout>
 
     </RelativeLayout>
