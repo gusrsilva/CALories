@@ -4,12 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "cs160";
     private int currentWorkoutValue, currentWorkoutPos, equivWorkoutPos;
     private TextView vUnits, vEquivUnits, vCalsBurned, vEquivCalsBurned;
+    private ImageView vFlame, vShine;
     private EditText vNumber;
     private Spinner equivalentSpinner;
     private String[] workoutNames, unitNames = new String[2];
@@ -37,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
         vUnits = (TextView)findViewById(R.id.units_text);
         vEquivUnits = (TextView)findViewById(R.id.equiv_units_text);
+        vFlame = (ImageView)findViewById(R.id.flame_image);
+        vShine = (ImageView)findViewById(R.id.shine_image);
+        vFlame.setAlpha((float)0);
+        vShine.setAlpha((float)0);
         vCalsBurned = (TextView)findViewById(R.id.calories_burned_amount);
         vEquivCalsBurned = (TextView)findViewById(R.id.equivalent_amount);
         vNumber = (EditText) findViewById(R.id.num_text);
@@ -58,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         //Initialize Spinner to choose workout type
         Spinner workoutSpinner = (Spinner) findViewById(R.id.workout_spinner);
         ArrayAdapter<CharSequence> workoutSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.workout_name_array, android.R.layout.simple_spinner_item);
-        workoutSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.array.workout_name_array, R.layout.my_spinner_item);
+        workoutSpinnerAdapter.setDropDownViewResource(R.layout.my_spinner_dropdown_item);
         workoutSpinner.setAdapter(workoutSpinnerAdapter);
         workoutSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -79,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         //Initialize Spinner to choose equivalent workout to compare
         equivalentSpinner = (Spinner) findViewById(R.id.equivalent_workout_spinner);
         ArrayAdapter<CharSequence> equivalentAdapter = ArrayAdapter.createFromResource(this,
-                R.array.workout_name_array, android.R.layout.simple_spinner_item);
-        equivalentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.array.workout_name_array, R.layout.my_spinner_item);
+        equivalentAdapter.setDropDownViewResource(R.layout.my_spinner_dropdown_item);
         equivalentSpinner.setAdapter(equivalentAdapter);
         equivalentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -105,6 +110,39 @@ public class MainActivity extends AppCompatActivity {
     {
         int calsBurned = getCalsBurned();
         vCalsBurned.setText(String.valueOf(calsBurned));
+        int color = getTrafficlightColor((float) calsBurned / 100.0);
+        vFlame.setColorFilter(color);
+        vCalsBurned.setTextColor(color);
+        if(calsBurned > Math.pow(10, 7))
+            vCalsBurned.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
+        else if(calsBurned > Math.pow(10, 4))
+            vCalsBurned.setTextSize(TypedValue.COMPLEX_UNIT_SP, 70);
+        else
+            vCalsBurned.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
+
+        //Set Flame
+        if (calsBurned > 50)
+        {
+            vFlame.setAlpha((float)1);
+            vFlame.setColorFilter(getTrafficlightColor((float) (calsBurned - 50) / 100.0));
+        }
+        else {
+            if(vFlame.getAlpha() > 0)
+                vFlame.setAlpha((float) 0);
+            vFlame.setColorFilter(getTrafficlightColor((float)0));
+        }
+
+        //Set shine
+        if (calsBurned > 100)
+        {
+            vShine.setAlpha((float)1);
+            vShine.setColorFilter(getTrafficlightColor((float) (calsBurned - 100) / 100.0));
+        }
+        else {
+            if(vShine.getAlpha() > 0)
+                vShine.setAlpha((float) 0);
+            vShine.setColorFilter(getTrafficlightColor((float)0));
+        }
 
         //Set equivalent to next workout amount
         if(currentWorkoutPos == equivWorkoutPos) {
@@ -133,6 +171,11 @@ public class MainActivity extends AppCompatActivity {
         double equivalentWorkoutValue = workoutVals[equivWorkoutPos];
         double equivalentAmount = (calsBurned * equivalentWorkoutValue) / 100;
         return (int)Math.ceil(equivalentAmount);
+    }
+
+    private int getTrafficlightColor(double value){
+        value = 1 - value;
+        return android.graphics.Color.HSVToColor(new float[]{(float)value*58f,1f,1f});
     }
 
 }

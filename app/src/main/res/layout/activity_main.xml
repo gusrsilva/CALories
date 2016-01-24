@@ -16,13 +16,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/inputs_holder">
 
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/workout_spinner_holder"
+        android:layout_centerVertical="true">
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/workout_spinner"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:spinnerMode="dropdown" />
+    </android.support.v7.widget.CardView>
+
 
 
         <EditText
@@ -31,11 +38,12 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/num_text"
-            android:layout_toEndOf="@+id/workout_spinner"
+            android:layout_toEndOf="@+id/workout_spinner_holder"
             android:textAlignment="center"
             android:fontFamily="sans-serif-light"
             android:layout_toStartOf="@+id/units_text"
-            android:hint="@string/hint" />
+            android:hint="@string/hint"
+            android:maxLength="9" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -64,15 +72,45 @@
             android:textSize="20sp" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00"
+            android:text="0"
             android:id="@+id/calories_burned_amount"
             android:layout_below="@+id/calories_burned_text"
             android:textAlignment="center"
             android:textSize="100sp"
             android:textColor="@android:color/black"
-            android:fontFamily="sans-serif-thin" />
+            android:fontFamily="sans-serif-thin"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true"
+            android:ellipsize="end" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/flame_image"
+            android:layout_toRightOf="@+id/calories_burned_amount"
+            android:layout_alignBottom="@+id/calories_burned_amount"
+            android:src="@drawable/flame"
+            android:layout_alignTop="@+id/calories_burned_amount"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:tint="@color/flame" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/calories_burned_amount"
+            android:layout_alignBottom="@+id/calories_burned_amount"
+            android:src="@drawable/shine"
+            android:layout_alignTop="@+id/calories_burned_amount"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:id="@+id/shine_image" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,7 +124,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00"
+            android:text="0"
             android:id="@+id/equivalent_amount"
             android:textAlignment="center"
             android:textSize="40sp"
@@ -111,7 +149,7 @@
                 android:id="@+id/equiv_units_text" />
 
             <Spinner
-                android:layout_width="150dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/equivalent_workout_spinner"
                 android:spinnerMode="dropdown" />
