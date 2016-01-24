@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.mobiledevsberkeley.calories.MainActivity"
-    android:id="@+id/main_layout">
+    android:id="@+id/main_layout"
+    android:descendantFocusability="beforeDescendants">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
             android:textAlignment="center"
             android:fontFamily="sans-serif-light"
             android:layout_toStartOf="@+id/units_text"
-            android:hint=" " />
+            android:hint="@string/hint" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,23 +49,11 @@
 
     </RelativeLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/calc_button"
-        android:id="@+id/calculate_button"
-        android:layout_below="@+id/inputs_holder"
-        android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
-        android:layout_margin="10dp"
-        android:backgroundTint="@color/colorAccent"
-        android:fontFamily="sans-serif-light" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/results_holder"
-        android:layout_below="@+id/calculate_button">
+        android:layout_below="@+id/inputs_holder">
 
         <TextView
             android:layout_width="fill_parent"
@@ -94,31 +83,39 @@
             android:textSize="16sp"
             android:fontFamily="sans-serif-light" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="00"
+            android:id="@+id/equivalent_amount"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            android:textColor="@android:color/black"
+            android:fontFamily="sans-serif-thin"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/equivalent_text"
-            android:gravity="center">
+            android:layout_marginTop="15dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/equivalent_amount"
+            android:gravity="center"
+            android:layout_centerHorizontal="true">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00"
-                android:id="@+id/equivalent_amount"
-                android:textAlignment="center"
-                android:textSize="40sp"
-                android:textColor="@android:color/black"
-                android:fontFamily="sans-serif-thin"
-                android:layout_centerInParent="true" />
+                android:text="of"
+                android:id="@+id/equiv_units_text" />
 
             <Spinner
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/equivalent_workout_spinner"
-                android:spinnerMode="dropdown"
-                android:layout_toRightOf="@+id/equivalent_amount"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
 
     </RelativeLayout>
 

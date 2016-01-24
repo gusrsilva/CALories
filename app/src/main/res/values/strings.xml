@@ -5,4 +5,5 @@
     <string name="calc_button">Calculate</string>
     <string name="calories_burned">Calories burned:</string>
     <string name="equivalent_to">That\'s equivalent to:</string>
+    <string name="hint">Enter Amount</string>
 </resources>
