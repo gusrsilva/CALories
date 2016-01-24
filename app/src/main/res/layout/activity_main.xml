@@ -147,12 +147,18 @@
                 android:layout_height="wrap_content"
                 android:text="of"
                 android:id="@+id/equiv_units_text" />
-
-            <Spinner
-                android:layout_width="100dp"
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/equivalent_workout_spinner"
-                android:spinnerMode="dropdown" />
+                android:id="@+id/equivalent_spinner_holder"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp">
+                <Spinner
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/equivalent_workout_spinner"
+                    android:spinnerMode="dropdown" />
+            </android.support.v7.widget.CardView>
         </LinearLayout>
 
     </RelativeLayout>
