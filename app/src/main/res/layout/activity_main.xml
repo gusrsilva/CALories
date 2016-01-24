@@ -141,11 +141,20 @@
                 android:layout_height="wrap_content"
                 android:text="of"
                 android:id="@+id/equiv_units_text" />
+<<<<<<< HEAD
                 <Spinner
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/equivalent_workout_spinner"
                     android:spinnerMode="dropdown" />
+=======
+
+            <Spinner
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/equivalent_workout_spinner"
+                android:spinnerMode="dropdown" />
+>>>>>>> parent of ee3c0ef... Finalized Design 1
         </LinearLayout>
 
     </RelativeLayout>
