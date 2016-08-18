@@ -1,7 +1,13 @@
 package org.mobiledevsberkeley.calories;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,9 @@ import android.util.TypedValue;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 
 public class CalorieCalculatorFragment extends Fragment {
 
@@ -26,9 +35,12 @@ public class CalorieCalculatorFragment extends Fragment {
     private TextView vUnits, vEquivUnits, vCalsBurned, vEquivCalsBurned;
     private ImageView vFlame;
     private EditText vNumber;
-    private Spinner equivalentSpinner;
     private String[] workoutNames, unitNames = new String[2];
     private int[] workoutVals, workoutUnits;
+    private String GOAL_KEY = "goal", AMOUNT_KEY = "amnt";
+    private ArrayList<TextView> equivTexts = new ArrayList<>();
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor prefEditor;
 
     public CalorieCalculatorFragment() {
         // Required empty public constructor
@@ -41,6 +53,9 @@ public class CalorieCalculatorFragment extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_calorie_calculator, container, false);
 
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        prefEditor = sharedPref.edit();
+
         workoutNames = getResources().getStringArray(R.array.workout_name_array);
         unitNames[0] = getResources().getString(R.string.reps);unitNames[1]=getResources().getString(R.string.minutes);
         workoutVals = getResources().getIntArray(R.array.workout_value_array);
@@ -49,15 +64,34 @@ public class CalorieCalculatorFragment extends Fragment {
         currentWorkoutValue = workoutVals[currentWorkoutPos];
 
         vUnits = (TextView)view.findViewById(R.id.units_text);
-        vEquivUnits = (TextView)view.findViewById(R.id.equiv_units_text);
         vFlame = (ImageView)view.findViewById(R.id.flame_image);
         vCalsBurned = (TextView)view.findViewById(R.id.calories_burned_amount);
-        vEquivCalsBurned = (TextView)view.findViewById(R.id.equivalent_amount);
         vNumber = (EditText) view.findViewById(R.id.num_text);
         saveButton = (Button)view.findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int currentAmount = sharedPref.getInt(AMOUNT_KEY, 0);
+                int newAmount = getCalsBurned();
+                int currGoal = sharedPref.getInt(GOAL_KEY, 0);
+                vNumber.setText("");
+                prefEditor.putInt(AMOUNT_KEY, currentAmount + newAmount);
+                prefEditor.apply();
+
+                if(currentAmount + newAmount > currGoal && currGoal > 0)
+                    scrollToGoal();
+                else {
+                    Snackbar.make(v
+                            , String.format(Locale.ENGLISH, "Added %d Calories!", newAmount)
+                            , Snackbar.LENGTH_LONG)
+                            .setAction("Check Progress", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    scrollToGoal();
+                                }
+                            })
+                            .show();
+                }
             }
         });
         vNumber.addTextChangedListener(new TextWatcher() {
@@ -96,30 +130,25 @@ public class CalorieCalculatorFragment extends Fragment {
             }
         });
 
-        //Initialize Spinner to choose equivalent workout to compare
-        equivalentSpinner = (Spinner) view.findViewById(R.id.equivalent_workout_spinner);
-        ArrayAdapter<CharSequence> equivalentAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.workout_name_array, R.layout.my_spinner_item);
-        equivalentAdapter.setDropDownViewResource(R.layout.my_spinner_dropdown_item);
-        equivalentSpinner.setAdapter(equivalentAdapter);
-        equivalentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                equivWorkoutPos = position;
-                int equivalentAmount = getEquivAmount();
-                vEquivCalsBurned.setText(String.valueOf(equivalentAmount));
-                String units = unitNames[workoutUnits[position]] + " of";
-                vEquivUnits.setText(units);
-            }
+        //Add all equivalent workout text views to an arraylist for easier updating
+        equivTexts.add((TextView)view.findViewById(R.id.pushups_text));
+        equivTexts.add((TextView)view.findViewById(R.id.situp_text));
+        equivTexts.add((TextView)view.findViewById(R.id.squats_text));
+        equivTexts.add((TextView)view.findViewById(R.id.leglift_text));
+        equivTexts.add((TextView)view.findViewById(R.id.planking_text));
+        equivTexts.add((TextView)view.findViewById(R.id.jumpingjacks_text));
+        equivTexts.add((TextView)view.findViewById(R.id.pullups_text));
+        equivTexts.add((TextView)view.findViewById(R.id.cycling_text));
+        equivTexts.add((TextView)view.findViewById(R.id.walking_text));
+        equivTexts.add((TextView)view.findViewById(R.id.jogging_text));
+        equivTexts.add((TextView)view.findViewById(R.id.swimming_text));
+        equivTexts.add((TextView)view.findViewById(R.id.stairclimb_text));
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+        //Initialize RecyclerView
+
         return view;
     }
-
 
     private void updateResults()
     {
@@ -141,12 +170,25 @@ public class CalorieCalculatorFragment extends Fragment {
         //Set equivalent to next workout amount
         if(currentWorkoutPos == equivWorkoutPos) {
             equivWorkoutPos = (currentWorkoutPos + 1) % workoutNames.length;
-            equivalentSpinner.setSelection(equivWorkoutPos, true);
         }
-        int equivalentAmount = getEquivAmount();
-        vEquivCalsBurned.setText(String.valueOf(equivalentAmount));
-        String units = unitNames[workoutUnits[equivWorkoutPos]] + " of";
-        vEquivUnits.setText(units);
+        updateEquivResults();
+
+    }
+
+    private void scrollToGoal()
+    {
+        TabbedActivity.viewPager.setCurrentItem(1, true);
+    }
+
+    private void updateEquivResults()
+    {
+        for(int i=0; i < 12; i++)
+        {
+            TextView curr = equivTexts.get(i);
+            int currAmnt = getEquivAmount(i);
+            String unit = unitNames[workoutUnits[i]];
+            curr.setText(currAmnt + " " + unit);
+        }
     }
 
     private int getCalsBurned()
@@ -159,10 +201,10 @@ public class CalorieCalculatorFragment extends Fragment {
         return (int)Math.ceil(calsBurned);
     }
 
-    private int getEquivAmount()
+    private int getEquivAmount(int i)
     {
         double calsBurned = getCalsBurned();
-        double equivalentWorkoutValue = workoutVals[equivWorkoutPos];
+        double equivalentWorkoutValue = workoutVals[i];
         double equivalentAmount = (calsBurned * equivalentWorkoutValue) / 100;
         return (int)Math.ceil(equivalentAmount);
     }
